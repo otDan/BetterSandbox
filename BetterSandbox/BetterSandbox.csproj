@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Asset\bettersandbox_assets" />
     <None Include="publish.ps1" />
     <None Include="manifest.json" />
     <None Include="README.md" />

@@ -4,11 +4,11 @@ using RWF.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ModdingUtils.AIMinion;
 using UnboundLib.GameModes;
 using UnboundLib;
 using UnityEngine;
 using Photon.Pun;
+using BetterSandbox.Asset;
 
 namespace BetterSandbox.Mode
 {
@@ -55,10 +55,12 @@ namespace BetterSandbox.Mode
             UIHandler.instance.ShowRoundCounterSmall(teamPoints, teamRounds);
             PlayerManager.instance.InvokeMethod("SetPlayersVisible", true);
             StartCoroutine(DoRoundStart());
+            SandboxCanvas.SetActive(true);
         }
 
         private IEnumerator TriggerPick(Player player)
         {
+            SandboxCanvas.SetActive(false);
             // BetterSandbox.Instance.Log($"minions: {ModdingUtils.AIMinion.Extensions.CharacterDataExtension.GetAdditionalData(player.data).minions.Count}");
             yield return WaitForSyncUp();
             yield return GameModeManager.TriggerHook("PlayerPickStart");
@@ -66,12 +68,13 @@ namespace BetterSandbox.Mode
             yield return CardChoice.instance.DoPick(1, player.playerID, PickerType.Player);
             yield return GameModeManager.TriggerHook("PlayerPickEnd");
             yield return new WaitForSecondsRealtime(0.1f);
+            SandboxCanvas.SetActive(true);
         }
 
         public override void PlayerDied(Player killedPlayer, int teamsAlive)
         {
             // PlayerAssigner
-            AIMinionHandler.sandbox
+            // AIMinionHandler.sandbox
             if (killedPlayer.GetComponentInChildren<PlayerAI>() != null)
                 BetterSandbox.Instance.Log($"Killed player {killedPlayer.playerID} is minion");
             if (toRespawn.Contains(killedPlayer.playerID)) return;
@@ -103,6 +106,32 @@ namespace BetterSandbox.Mode
             var spawns = MapManager.instance.GetSpawnPoints().Select(s => s.localStartPos).ToArray();
             spawns.Shuffle();
             return spawns[0];
+        }
+
+
+        private static GameObject sandboxCanvas;
+        public static GameObject SandboxCanvas
+        {
+            get
+            {
+                if (sandboxCanvas != null)
+                {
+                    SetCanvasScaleFactor(sandboxCanvas, 1f);
+                    return sandboxCanvas;
+                }
+                sandboxCanvas = Instantiate(AssetManager.SandboxCanvas);
+                SetCanvasScaleFactor(sandboxCanvas, 1f);
+                Instantiate(AssetManager.ManageSandbox, sandboxCanvas.transform);
+                return sandboxCanvas;
+            }
+
+            set => sandboxCanvas = value;
+        }
+
+        private static void SetCanvasScaleFactor(GameObject gameObject, float scale)
+        {
+            Canvas canvas = gameObject.GetComponent<Canvas>();
+            canvas.scaleFactor = scale;
         }
     }
 }

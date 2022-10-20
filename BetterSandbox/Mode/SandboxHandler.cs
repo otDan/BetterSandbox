@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HarmonyLib;
 using RWF;
 using RWF.GameModes;
-using TMPro;
-using UnboundLib;
 using UnboundLib.Extensions;
 using UnboundLib.GameModes;
-using UnboundLib.Utils;
-using UnityEngine.UI;
-using UnityEngine;
 
 namespace BetterSandbox.Mode
 {

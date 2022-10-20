@@ -1,8 +1,6 @@
 ﻿using BepInEx;
 using BetterSandbox.Mode;
 using HarmonyLib;
-using RWF;
-using UnboundLib;
 using UnboundLib.GameModes;
 using SandboxHandler = BetterSandbox.Mode.SandboxHandler;
 
@@ -18,7 +16,7 @@ namespace BetterSandbox
         private const string ModId = "ot.dan.rounds.bettersandbox";
         private const string ModName = "Better Sandbox";
         public const string Version = "1.0.0";
-        public const string ModInitials = "";
+        public const string ModInitials = "BS";
         private const string CompatibilityModName = "BetterSandbox";
         public static BetterSandbox Instance { get; private set; }
         private const bool DEBUG = true;
@@ -33,6 +31,7 @@ namespace BetterSandbox
 
         private void Start()
         {
+            // var GameUI = GameObject.Find("Game/UI/UI_Game");
             GameModeManager.RemoveHandler(GameModeManager.SandBoxID);
             GameModeManager.AddHandler<Sandbox>(SandboxHandler.GameModeID, new SandboxHandler());
             GameModeManager.AddHandler<Sandbox>(TeamSandboxHandler.GameModeID, new TeamSandboxHandler());
